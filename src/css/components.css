@@ -1,0 +1,353 @@
+/*
+  components.css — UI Components
+  ═══════════════════════════════════════════════════════════════
+
+  Reusable building blocks: the hero section, stat grid, nav tabs,
+  tags, contact items, form inputs, and inspector widgets.
+
+  Each section is clearly labelled so you can find what to edit.
+
+  ═══════════════════════════════════════════════════════════════
+*/
+
+
+/* ── NAVIGATION TABS ────────────────────────────────────────── */
+
+.tab {
+  padding: 0 16px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;   /* shows accent colour when active */
+  color: var(--muted);
+  transition: color 0.15s, border-color 0.15s;
+  font-family: var(--mono);
+  font-size: 11px;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  letter-spacing: 0.05em;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  background: rgba(200,250,100,0.04);
+}
+
+/* Small circle indicator inside each tab */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.tab.active .dot {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+
+/* ── HERO SECTION ───────────────────────────────────────────── */
+
+.hero { margin-bottom: 40px; }
+
+/* The small line above your name, e.g. "// GAME DEVELOPER — C#" */
+.hero-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+
+/* Your name — big display type */
+.hero-name {
+  font-family: var(--display);
+  font-size: 64px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+/* The <span> inside .hero-name gets the accent colour */
+.hero-name span { color: var(--accent); }
+
+/* Subtitle below your name */
+.hero-title {
+  font-family: var(--display);
+  font-size: 24px;
+  font-weight: 300;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 20px;
+}
+
+/* Short bio paragraph */
+.hero-bio {
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--muted);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+
+/* ── STAT GRID ──────────────────────────────────────────────── */
+
+/* The row of numbers: "12 PROJECTS  5 GAME JAMS" etc. */
+.stat-grid {
+  display: flex;
+  gap: 1px;                       /* 1px gap creates the dividing lines */
+  margin-bottom: 40px;
+  background: var(--border);      /* shows through the gaps as lines    */
+  border: 1px solid var(--border);
+  width: fit-content;
+}
+
+.stat {
+  background: var(--panel);
+  padding: 16px 24px;
+  min-width: 120px;
+}
+
+.stat-val {
+  font-family: var(--display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-top: 4px;
+}
+
+
+/* ── SECTION TITLE ──────────────────────────────────────────── */
+
+/* The "GAMES", "TECH STACK" etc. headings with a line after them */
+.section-title {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* The line after the title text — created with CSS, no extra HTML */
+.section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+
+/* ── TAGS ───────────────────────────────────────────────────── */
+
+/* The row of tech tags on the About page */
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;   /* wraps to a new line when it runs out of space */
+  gap: 6px;
+  margin-bottom: 32px;
+}
+
+.tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  background: var(--panel);
+  transition: all 0.15s;
+  cursor: default;
+}
+
+.tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(200,250,100,0.06);
+}
+
+/* Add class="primary" to tags that are your strongest skills */
+.tag.primary {
+  border-color: var(--accent2);
+  color: var(--accent2);
+  background: rgba(74,240,196,0.06);
+}
+
+
+/* ── CONTACT ────────────────────────────────────────────────── */
+
+/* Two-column grid of contact links */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.contact-item {
+  background: var(--panel);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+
+.contact-item:hover { background: var(--panel2); }
+
+.contact-icon {
+  font-size: 18px;
+  color: var(--accent2);
+  width: 20px;
+  text-align: center;
+}
+
+.contact-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+.contact-val {
+  font-family: var(--display);
+  font-size: 15px;
+  color: var(--text);
+}
+
+
+/* ── CONTACT FORM ───────────────────────────────────────────── */
+
+.form-field { margin-bottom: 16px; }
+
+.form-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.form-input {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus    { border-color: var(--accent); }
+.form-input::placeholder { color: var(--muted); }
+
+/* textarea is the multiline version of an input */
+textarea.form-input {
+  min-height: 100px;
+  resize: vertical;          /* user can drag to resize vertically */
+  font-family: var(--display);
+}
+
+.btn-send {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  padding: 10px 24px;
+  background: var(--accent);
+  color: #0e0f11;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  transition: opacity 0.15s, transform 0.1s;
+}
+
+.btn-send:hover  { opacity: 0.85; }
+.btn-send:active { transform: scale(0.98); }   /* slight press-down effect */
+
+
+/* ── INSPECTOR PANEL COMPONENTS ─────────────────────────────── */
+
+/* Key–value rows in the inspector, e.g. "location  New Zealand" */
+.prop-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.prop-key   { color: var(--muted); }
+.prop-val   { color: var(--accent2); }
+.prop-val.ok     { color: var(--accent); }
+.prop-val.accent { color: var(--accent); }
+
+
+/* ── SKILL BARS ─────────────────────────────────────────────── */
+
+.skill-bar-row { margin-bottom: 10px; }
+
+.skill-bar-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.skill-name { color: var(--text);   font-size: 10px; }
+.skill-pct  { color: var(--accent); font-size: 10px; }
+
+/* The grey track behind the bar */
+.skill-track {
+  height: 2px;
+  background: var(--border);
+}
+
+/* The coloured fill — width is set inline in the HTML, e.g. style="width:85%" */
+.skill-fill      { height: 100%; background: var(--accent); }
+.skill-fill.teal { background: var(--accent2); }
+
+
+/* ── CONSOLE LOG ────────────────────────────────────────────── */
+
+.log-line {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.log-time { color: var(--muted); white-space: nowrap; }
+.log-msg  { color: var(--text); }
+.log-msg.ok   { color: var(--accent); }
+.log-msg.info { color: var(--accent2); }

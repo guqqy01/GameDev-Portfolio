@@ -1,0 +1,90 @@
+/*
+  variables.css — Design Tokens
+  ═══════════════════════════════════════════════════════════════
+
+  Think of this like a static class full of constants in C#.
+  Every colour, font, and spacing value used across the site
+  lives here. Change a value once and it updates everywhere.
+
+  In CSS, variables are declared inside :root (which just means
+  "the whole page") and are referenced elsewhere like this:
+    color: var(--accent);
+
+  ═══════════════════════════════════════════════════════════════
+*/
+
+:root {
+
+  /* ── COLOURS ──────────────────────────────────────────────── */
+
+  --bg:      #0e0f11;   /* main page background — near black    */
+  --panel:   #13151a;   /* sidebar and topbar background        */
+  --panel2:  #191c23;   /* slightly lighter panel, used on hover*/
+  --border:  #2a2d35;   /* lines separating sections            */
+
+  --accent:  #c8fa64;   /* lime green — primary highlight colour */
+  --accent2: #4af0c4;   /* teal — secondary highlight colour    */
+
+  --text:    #e8eaf0;   /* main body text                       */
+  --muted:   #6b7080;   /* dimmed text — labels, subtitles      */
+
+  /* ── FONTS ────────────────────────────────────────────────── */
+
+  /* JetBrains Mono: used for labels, tags, code-like UI text   */
+  --mono: 'JetBrains Mono', monospace;
+
+  /* Barlow Condensed: used for headings and large display text  */
+  --display: 'Barlow Condensed', sans-serif;
+}
+
+/* Removes default browser margin/padding from everything,
+   and makes sizing work intuitively (padding doesn't expand
+   elements beyond their set width). Same idea as Unity's
+   RectTransform — you control the box, not the browser. */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base page styles */
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--display);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Subtle scanline effect layered over the whole page.
+   ::before is a "fake" element that sits in front of everything
+   but doesn't block clicks (pointer-events: none). */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.06) 2px,
+    rgba(0,0,0,0.06) 4px
+  );
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* The pulsing animation used on the "open to work" dot.
+   @keyframes defines an animation sequence — like an AnimationClip.
+   0% = start, 100% = end, and it loops. */
+@keyframes pulse {
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.3; }
+}
+
+/* Page-load fade-in used on each view when it becomes active */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}

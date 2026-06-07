@@ -1,0 +1,212 @@
+/*
+  layout.css — Page Structure
+  ═══════════════════════════════════════════════════════════════
+
+  This file controls the overall skeleton of the page:
+  where the topbar, sidebar, main content, and right panel sit.
+
+  The key concept here is CSS Grid — it lets you divide the page
+  into rows and columns and place elements into them. Think of it
+  like anchoring UI panels in Unity's RectTransform system.
+
+  ═══════════════════════════════════════════════════════════════
+*/
+
+
+/* ── TOPBAR ─────────────────────────────────────────────────── */
+
+.topbar {
+  display: flex;                     /* lay children out in a row  */
+  align-items: center;               /* vertically centre them      */
+  justify-content: space-between;    /* push logo left, status right*/
+  padding: 0 32px;
+  height: 48px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  position: sticky;   /* stays at top of screen when you scroll */
+  top: 0;
+  z-index: 100;       /* sits above other content                */
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;          /* space between logo and tabs             */
+}
+
+.topbar-logo {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.topbar-tabs {
+  display: flex;
+  gap: 1px;
+}
+
+.status-bar-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.version-label {
+  color: var(--muted);
+  font-size: 10px;
+}
+
+/* The "open to work" pill with the animated dot */
+.status-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent2);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+
+/* The dot before the status text — created with CSS, no extra HTML needed */
+.status-pill::before {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent2);
+  animation: pulse 2s infinite;   /* defined in variables.css */
+}
+
+
+/* ── THREE-COLUMN LAYOUT ────────────────────────────────────── */
+
+/*
+  CSS Grid divides the page into columns.
+  220px  = left sidebar (fixed width)
+  1fr    = main content (takes all remaining space — like a flexible layout group)
+  260px  = right panel (fixed width)
+*/
+.layout {
+  display: grid;
+  grid-template-columns: 220px 1fr 260px;
+  min-height: calc(100vh - 48px);   /* full height minus the topbar */
+}
+
+.layout2 {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: calc(100vh - 48px);   /* full height minus the topbar */
+}
+
+/* ── LEFT SIDEBAR ───────────────────────────────────────────── */
+
+.sidebar {
+  background: var(--panel);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;   /* stack children vertically */
+  position: sticky;
+  top: 0px;                /* sticks just below the topbar */
+  height: calc(100vh);
+  overflow-y: auto;         /* scrollable if content overflows */
+}
+
+.sidebar-section {
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+}
+
+.sidebar-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  padding: 4px 16px 8px;
+  text-transform: uppercase;
+}
+
+/* Sidebar buttons and links share the same look */
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.1s, background 0.1s;   /* smooth hover */
+  text-decoration: none;    /* removes underline from <a> links */
+  border: none;             /* removes default button border    */
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.sidebar-item:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+.sidebar-item.active {
+  color: var(--accent);
+  background: rgba(200,250,100,0.06);
+}
+
+.sidebar-item .icon {
+  font-size: 13px;
+  width: 16px;
+  text-align: center;
+}
+
+
+/* ── MAIN CONTENT AREA ──────────────────────────────────────── */
+
+.main {
+  background: var(--bg);
+  overflow-y: auto;
+}
+
+/* Each tab's content is a "view". Only one is shown at a time.
+   display:none hides it completely — like SetActive(false) in Unity. */
+.view {
+  display: block;
+  padding: 32px;
+  animation: fadeIn 0.2s ease;   /* defined in variables.css */
+}
+
+.view.active{
+  display: block;
+}
+/* ── RIGHT INSPECTOR PANEL ──────────────────────────────────── */
+
+.right-panel {
+  background: var(--panel);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--mono);
+  font-size: 11px;
+  position: sticky;
+  top: 48px;
+  height: calc(100vh - 48px);
+  overflow-y: auto;
+}
+
+.panel-section {
+  border-bottom: 1px solid var(--border);
+  padding: 16px;
+}
+
+.panel-title {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}

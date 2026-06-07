@@ -1,0 +1,165 @@
+/*
+  games.css — Game Card Grid
+  ═══════════════════════════════════════════════════════════════
+
+  Styles for the project cards on the portfolio page.
+  Kept in its own file because it's the most likely thing
+  you'll want to tweak as you add more games.
+
+  ═══════════════════════════════════════════════════════════════
+*/
+
+
+/* ── GRID ───────────────────────────────────────────────────── */
+
+/*
+  auto-fill means: create as many columns as fit.
+  minmax(260px, 1fr) means: each column is at least 260px wide,
+  but can grow to fill available space.
+  This makes the grid automatically reflow as the window resizes.
+*/
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 40px;
+}
+
+/* ── CARD ───────────────────────────────────────────────────── */
+
+.game-card {
+  background: var(--panel);
+  padding: 20px;
+  cursor: pointer;
+  transition: background 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+a.game-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* The coloured left-edge accent bar.
+   ::before creates a fake element at the left side of each card.
+   It's transparent by default and switches to accent on hover. */
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--border);
+  transition: background 0.15s;
+}
+
+.game-card:hover              { background: var(--panel2); }
+.game-card:hover::before      { background: var(--accent); }
+
+
+/* ── SCREENSHOT THUMBNAIL ───────────────────────────────────── */
+
+.game-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;         /* always stays widescreen ratio   */
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  margin-bottom: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+/*
+  This placeholder sits inside .game-thumb until you have a
+  real screenshot. To replace it with an image, remove the
+  .thumb-placeholder div entirely and add this inside .game-thumb:
+
+    <img src="images/mygame.png" alt="My Game"
+         style="width:100%; height:100%; object-fit:cover;">
+
+  object-fit:cover works like Unity's "Aspect Fill" — scales the
+  image to fill the box, cropping edges if needed.
+*/
+.thumb-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Subtle grid overlay behind the placeholder icon */
+.thumb-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(74,240,196,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,240,196,0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.thumb-icon  { font-size: 28px; opacity: 0.3; position: relative; }
+.thumb-label { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.1em; position: relative; }
+
+/* Engine label in the top-right corner of the thumbnail */
+.game-engine-badge {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+}
+
+
+/* ── CARD TEXT ──────────────────────────────────────────────── */
+
+.game-title {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  margin-bottom: 4px;
+}
+
+.game-genre {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
+.game-desc {
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+
+/* ── CARD TAGS ──────────────────────────────────────────────── */
+
+.game-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+
+.game-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  letter-spacing: 0.06em;
+}
