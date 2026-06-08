@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import GameCard from '../../components/gamecard';
 import PortfolioLeftSidebar from '../../components/portfolioleftsidebar'; 
+import { games } from '../../data/games';
 
 function Portfolio() {
 
-    const [currentTab, setCurrentTab] = useState('portfolio');
     const [activeFilter, setActiveFilter] = useState('all');
 
     return (
@@ -31,14 +31,17 @@ function Portfolio() {
                 <div className="section-title">GAMES</div>
 
                 <div className="games-grid">
-                    <GameCard
-                        title="The Pilgrim's Journey"
-                        genre="ADVENTURE / ROGUELIKE / 2D"
-                        description="An adventure game where you are the bullet hell protagonist."
-                        engine="UNITY"
-                        tags={['C#', 'PROCEDURAL', 'PIXEL ART']}
-                        href="/games/pilgrims-journey"
-                    />
+                    {games.map(game => (
+                        <GameCard
+                            key={game.id}
+                            title={game.title}
+                            genre={game.genre}
+                            description={game.description}
+                            engine={game.engine}
+                            tags={game.tags}
+                            href={game.href}
+                        />
+                    ))}
                 </div>
             </div>
         </div>
