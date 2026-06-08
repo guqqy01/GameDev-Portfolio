@@ -6,7 +6,7 @@ function About(){
                 <div className="hero-title">INDIE DEVELOPER & DESIGNER</div>
                 <div className="hero-bio">
                     I'm Dale, I currently work as an outdoor instructor in New Zealand, and I've been making games in my spare time.
-                    And I am currently working on a project called <a href="/games/pilgrims-journey">The Pilgrim's Journey</a>, an adventure game where you are the bullet hell protagonist.
+                    And I am currently working on a project called <a href="/games/the-pilgrims-journey">The Pilgrim's Journey</a>, an adventure game where you are the bullet hell protagonist.
                     as well as a slew of prototypes and other projects. I have a passion for engaging mechanics and giving players enjoyable experiences.
                     I'm looking for opportunities to collaborate on projects, and I'm looking to work in game development, design, or related fields. If you're interested in working together, feel free to reach out!
                 </div>

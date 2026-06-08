@@ -7,36 +7,40 @@ function SidebarTab({ label, icon, active, onClick }){
     );
 }
 
-function PortfolioLeftSidebar({ onFilter, currentFilter }) {
+function SidebarSection({ label, sidebarTabs, onFilter, currentFilter })
+{
+    return (
+        <div className="sidebar-section">
+            <div className="sidebar-label">{label}</div>
+            <div>
+                    {sidebarTabs.map(tab => (
+                        <SidebarTab
+                        key={tab.key}
+                        label={tab.label}
+                        icon={tab.icon}
+                        active={currentFilter === tab.key}
+                        onClick={() => onFilter(tab.key)}
+                        />
+                    ))}
+                </div>
+        </div>
+    );
+}
+ 
+function LeftSidebar({ onFilter, currentFilter, sideBarSections }) {
     return (
         <div className="sidebar">
-            <div className="sidebar-section">
-                <div className="sidebar-label">SCENE EXPLORER</div>
-                <SidebarTab label="All Projects" icon="▣" active={currentFilter === 'all'} onClick={() => onFilter('all')} />
-                <SidebarTab label="Commercial" icon="◈" active={currentFilter === 'commercial'} onClick={() => onFilter('commercial')} />
-                <SidebarTab label="Prototypes" icon="◇" active={currentFilter === 'proto'} onClick={() => onFilter('proto')} />
-            </div>
-
-            <div className="sidebar-section">
-                <div className="sidebar-label">FILTER BY TAG</div>
-                <SidebarTab label="Unity" icon="◉" active={currentFilter === 'Unity'} onClick={() => onFilter('Unity')} />
-                <SidebarTab label="Godot" icon="◉" active={currentFilter === 'Godot'} onClick={() => onFilter('Godot')} />
-                <SidebarTab label="C#" icon="◉" active={currentFilter === 'C#'} onClick={() => onFilter('C#')} />
-                <SidebarTab label="2D" icon="◉" active={currentFilter === '2D'} onClick={() => onFilter('2D')} />
-                <SidebarTab label="3D" icon="◉" active={currentFilter === '3D'} onClick={() => onFilter('3D')} />
-            </div>
-
-            <div className="sidebar-section">
-                <div className="sidebar-label">LINKS</div>
-                <a className="sidebar-item" href="https://github.com/YOURUSERNAME" target="_blank">
-                    <span className="icon">⇗</span> GitHub
-                </a>
-                <a className="sidebar-item" href="https://YOURUSERNAME.itch.io" target="_blank">
-                    <span className="icon">⇗</span> itch.io
-                </a>
-            </div>
+            {sideBarSections.map((section) => (
+                <SidebarSection
+                    key={section.label}
+                    label={section.label}
+                    sidebarTabs={section.sidebarTabs}
+                    currentFilter={currentFilter}
+                    onFilter={onFilter}
+                />
+            ))}
         </div>
     );
 }
 
-export default PortfolioLeftSidebar;
+export default LeftSidebar;

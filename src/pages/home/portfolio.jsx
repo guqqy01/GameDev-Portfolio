@@ -1,15 +1,58 @@
 import { useState } from 'react';
 import GameCard from '../../components/gamecard';
-import PortfolioLeftSidebar from '../../components/portfolioleftsidebar'; 
+import LeftSidebar from '../../components/portfolioleftsidebar'; 
 import { games } from '../../data/games';
 
 function Portfolio() {
 
     const [activeFilter, setActiveFilter] = useState('all');
-
+    const sideBarSections = [
+        {   
+            label: 'Scene Explorer', 
+            sidebarTabs:
+            [
+                { 
+                    key: 'all', 
+                    label: 'All Projects',
+                    icon: "◉"
+                },
+            ] 
+        },
+        {   
+            label: 'Filter By Tag', 
+            sidebarTabs:
+            [
+                { 
+                    key: 'unity', 
+                    label: 'Unity',
+                    icon: "◉"
+                },
+                { 
+                    key: 'godot', 
+                    label: 'Godot',
+                    icon: "◉"
+                },
+                { 
+                    key: 'csharp', 
+                    label: 'C#',
+                    icon: "◉"
+                },
+                { 
+                    key: '2d', 
+                    label: '2D',
+                    icon: "◉"
+                },
+                { 
+                    key: '3d', 
+                    label: '3D',
+                    icon: "◉"
+                },
+            ] 
+        },
+    ];
     return (
         <div className="layout2">
-            <PortfolioLeftSidebar onFilter={setActiveFilter} currentFilter={activeFilter} />
+            <LeftSidebar onFilter={setActiveFilter} currentFilter={activeFilter} sideBarSections={sideBarSections} />
             <div className="view" id="view-portfolio">
                 <div className="hero">
                     <div className="hero-eyebrow">// GAME DEVELOPER — C# — NEW ZEALAND</div>

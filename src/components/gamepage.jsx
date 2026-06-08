@@ -13,3 +13,5 @@ function GamePage() {
 
     return <Page />;
 }
+
+export default GamePage;
