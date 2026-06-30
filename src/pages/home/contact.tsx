@@ -68,6 +68,13 @@ function Contact(){
                     <div className="contact-val">/in/DaleGush</div>
                     </div>
                 </a>
+                <a className="contact-item" href="https://www.youtube.com/@dalegush9579" target="_blank">
+                    <span className="contact-icon">▶</span>
+                    <div>
+                    <div className="contact-label">YOUTUBE</div>
+                    <div className="contact-val">youtube/dalegush9579</div>
+                    </div>
+                </a>
             </div>
 
             <div className="section-title">SEND A MESSAGE</div>

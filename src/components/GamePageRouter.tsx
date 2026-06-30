@@ -1,17 +1,14 @@
 import { useParams } from 'react-router-dom';
-import PilgrimsJourneyPage from '../pages/games/PilgrimsJourneyPage';
-
-const gamePages = {
-  'the-pilgrims-journey': PilgrimsJourneyPage,
-};
+import ProjectPage from '../pages/projects/ProjectPage';
+import { getProjectPageConfig } from '../pages/projects/projectPageConfig';
 
 function GamePageRouter() {
   const { gameId } = useParams<{ gameId: string }>();
-  const Page = gameId ? gamePages[gameId] : undefined;
+  const config = getProjectPageConfig(gameId);
 
-  if (!Page) return <div>Game not found</div>;
+  if (!config) return <div>This page is currently in development.</div>;
 
-  return <Page />;
+  return <ProjectPage config={config} />;
 }
 
 export default GamePageRouter;

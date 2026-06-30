@@ -1,4 +1,17 @@
-import type { SidebarSection } from '../types';
+import type { SidebarSection, SidebarTab } from '../types';
+import { games } from './gamesCatalog';
+
+const allTags = Array.from(
+  new Set(
+    games.flatMap((game) => [...game.tags, game.engine])
+  )
+);
+
+const tagTabs: SidebarTab[] = allTags.map((tag) => ({
+  key: tag,
+  label: tag,
+  icon: '◉',
+}));
 
 export const portfolioSidebarSections: SidebarSection[] = [
   {
@@ -13,32 +26,6 @@ export const portfolioSidebarSections: SidebarSection[] = [
   },
   {
     label: 'Filter By Tag',
-    sidebarTabs: [
-      {
-        key: 'unity',
-        label: 'Unity',
-        icon: '◉',
-      },
-      {
-        key: 'godot',
-        label: 'Godot',
-        icon: '◉',
-      },
-      {
-        key: 'csharp',
-        label: 'C#',
-        icon: '◉',
-      },
-      {
-        key: '2d',
-        label: '2D',
-        icon: '◉',
-      },
-      {
-        key: '3d',
-        label: '3D',
-        icon: '◉',
-      },
-    ],
+    sidebarTabs: tagTabs,
   },
 ];

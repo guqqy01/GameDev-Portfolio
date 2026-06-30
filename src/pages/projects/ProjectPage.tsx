@@ -1,14 +1,16 @@
 import { useMemo, useState } from 'react';
-import type { GamePageSection, GamePageSidebarSection, TopbarTab } from '../../types';
+import type { GamePageSection, GamePageSidebarSection, ProjectPageConfig, TopbarTab } from '../../types';
 import Header from '../../components/Header';
 import Sidebar from '../../components/Sidebar';
-import { gamePageSections } from './pilgrimsJourneyNavigation';
 
-const collectSectionTabs = (sections: GamePageSidebarSection[]) =>
-  sections.flatMap((section) => section.sections);
+const collectSectionTabs = (section: GamePageSidebarSection) => section.sections;
 
-function PilgrimsJourneyPage() {
-  const sectionTabs = useMemo(() => collectSectionTabs(gamePageSections), []);
+type ProjectPageProps = {
+  config: ProjectPageConfig;
+};
+
+function ProjectPage({ config }: ProjectPageProps) {
+  const sectionTabs = useMemo(() => collectSectionTabs(config.sections), [config.sections]);
   const initialSection = sectionTabs.find((tab) => tab.content)?.key ?? sectionTabs[0]?.key ?? '';
   const [currentTab, setCurrentTab] = useState<string>(initialSection);
 
@@ -47,7 +49,7 @@ function PilgrimsJourneyPage() {
     <div>
       <Header
         returnTo={() => window.history.back()}
-        logo="◆ Guqqy.dev      The Pilgrim's Journey"
+        logo={config.logo}
         tabs={[] as TopbarTab[]}
         rightBar="OPEN TO WORK"
         onSwitchTab={setCurrentTab}
@@ -55,8 +57,8 @@ function PilgrimsJourneyPage() {
       />
 
       <div className="layout2">
-        <Sidebar onClick={handleSectionSelect} currentTab={currentTab} gamePageSections={gamePageSections} />
-        <div className="view" id="view-pilgrims-journey">
+        <Sidebar onClick={handleSectionSelect} currentTab={currentTab} gamePageSections={config.sections} />
+        <div className="view" id={config.viewId}>
           <div className="page-sections">{renderSections(sectionTabs)}</div>
         </div>
       </div>
@@ -64,4 +66,4 @@ function PilgrimsJourneyPage() {
   );
 }
 
-export default PilgrimsJourneyPage;
+export default ProjectPage;

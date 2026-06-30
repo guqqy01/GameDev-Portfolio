@@ -8,6 +8,13 @@ import { portfolioSidebarSections } from '../../data/portfolioNavigation';
 function Portfolio() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
+  const visibleGames = activeFilter === 'all'
+    ? games
+    : games.filter((game) =>
+        game.tags.some((tag) => tag.toLowerCase() === activeFilter.toLowerCase()) ||
+        game.engine.toLowerCase() === activeFilter.toLowerCase()
+      );
+
   return (
     <div className="layout2">
       <Sidebar
@@ -23,23 +30,27 @@ function Portfolio() {
           <div className="hero-bio">
             I build games with a focus on tight mechanics, expressive visuals, and
             moments that stay with players long after they stop playing.
+            <br/>
+            <br/>
+            If you want to see more of a specific project, click one of the cards below.
           </div>
         </div>
 
         <div className="stat-grid">
-          <div className="stat"><div className="stat-val">12</div><div className="stat-label">PROJECTS</div></div>
-          <div className="stat"><div className="stat-val">5</div><div className="stat-label">GAME JAMS</div></div>
-          <div className="stat"><div className="stat-val">3</div><div className="stat-label">YEARS EXP</div></div>
-          <div className="stat"><div className="stat-val">2</div><div className="stat-label">SHIPPED</div></div>
+          <div className="stat"><div className="stat-val">{games.length}</div><div className="stat-label">PROJECTS</div></div>
+          <div className="stat"><div className="stat-val">0</div><div className="stat-label">GAME JAMS</div></div>
+          <div className="stat"><div className="stat-val">5</div><div className="stat-label">YEARS EXP</div></div>
+          <div className="stat"><div className="stat-val">0</div><div className="stat-label">SHIPPED</div></div>
         </div>
 
         <div className="section-title">GAMES</div>
 
         <div className="games-grid">
-          {games.map((game: Game) => (
+          {visibleGames.map((game: Game) => (
             <GameCard
               key={game.id}
               title={game.title}
+              screenshot={game.screenshot}
               genre={game.genre}
               description={game.description}
               engine={game.engine}

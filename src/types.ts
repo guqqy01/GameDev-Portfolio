@@ -19,6 +19,14 @@ export type GamePageSidebarSection = {
   sections: GamePageSection[];
 };
 
+export type ProjectPageConfig = {
+  id: string;
+  title: string;
+  logo: string;
+  viewId: string;
+  sections: GamePageSidebarSection;
+};
+
 export type SidebarTab = {
   key: string;
   label: string;
@@ -34,6 +42,7 @@ export type SidebarSection = {
 export type Game = {
   id: string;
   title: string;
+  screenshot: string;
   description: string;
   genre: string;
   engine: string;

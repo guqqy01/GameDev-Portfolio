@@ -17,21 +17,28 @@ function About(){
             <div className="tag-row" style={{ marginBottom: '32px' }}>
                 <span className="tag primary">C#</span>
                 <span className="tag primary">Unity</span>
-                <span className="tag">ShaderGraph</span>
-                <span className="tag">GLSL</span>
-                <span className="tag">Git</span>
-                <span className="tag">Blender</span>
+                <span className="tag primary">Git</span>
+                <span className="tag primary">ShaderGraph</span>
+                <span className="tag">Python</span>
+                <span className="tag">Accredo</span>
+                <span className="tag">Max Basic</span>
             </div>
 
             <div className="section-title">AREAS OF INTEREST</div>
             <div className="tag-row">
-                <span className="tag">Procedural Generation</span>
-                <span className="tag">Game Feel</span>
-                <span className="tag">Systems Design</span>
+                <span className="tag primary">Procedural Generation</span>
+                <span className="tag primary">Game Feel</span>
+                <span className="tag primary">Systems Design</span>
                 <span className="tag">Narrative Design</span>
                 <span className="tag">AI / Pathfinding</span>
                 <span className="tag">Shader Programming</span>
                 <span className="tag">Game Jams</span>
+            </div>
+
+            <div className="section-title">CURRENTLY LEARNING</div>
+            <div className="tag-row">
+                <span className="tag">React</span>
+                <span className="tag">TypeScript</span>
             </div>
         </div>
     );

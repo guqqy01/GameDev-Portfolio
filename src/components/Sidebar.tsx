@@ -28,11 +28,11 @@ type SidebarProps = {
   onClick: (key: string) => void;
   currentTab: string;
   sideBarSections?: SidebarSection[];
-  gamePageSections?: GamePageSidebarSection[];
+  gamePageSections?: GamePageSidebarSection;
 };
 
-const createSidebarTabs = (sections: GamePageSidebarSection[]): SidebarSection[] =>
-  sections.map((section) => ({
+const createSidebarTabs = (section: GamePageSidebarSection): SidebarSection[] => [
+  {
     label: section.label,
     sidebarTabs: section.sections.map((sectionTab) => {
       const buildTab = (tab: GamePageSidebarSection['sections'][number]): SidebarTabType => ({
@@ -44,7 +44,8 @@ const createSidebarTabs = (sections: GamePageSidebarSection[]): SidebarSection[]
 
       return buildTab(sectionTab);
     }),
-  }));
+  },
+];
 
 function SidebarTab({ tabKey, label, icon, active, onClick, children, isExpanded, onToggle, currentTab }: SidebarTabProps) {
   const hasChildren = children?.length > 0;
