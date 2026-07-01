@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type {
   GamePageSidebarSection,
   SidebarSection,
@@ -47,12 +47,59 @@ const createSidebarTabs = (section: GamePageSidebarSection): SidebarSection[] =>
   },
 ];
 
+// Recursively checks whether `key` is the tab itself or lives somewhere
+// inside its children — used to find which branch needs to stay open.
+function containsKey(tab: SidebarTabType, key: string): boolean {
+  if (tab.key === key) return true;
+  if (!tab.children) return false;
+  return tab.children.some((child) => containsKey(child, key));
+}
+
+// Given a flat list of sibling tabs, returns which of them contain
+// currentTab somewhere in their branch — these need to be open.
+function computeAutoOpenKeys(tabs: SidebarTabType[], currentTab: string): Set<string> {
+  const open = new Set<string>();
+  tabs.forEach((tab) => {
+    if (tab.children && tab.children.length > 0 && containsKey(tab, currentTab)) {
+      open.add(tab.key);
+    }
+  });
+  return open;
+}
+
 function SidebarTab({ tabKey, label, icon, active, onClick, children, isExpanded, onToggle, currentTab }: SidebarTabProps) {
   const hasChildren = children && children.length > 0;
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  // Branches the user explicitly opened by hand — these stay open even
+  // when the scroll-spy's active path moves elsewhere. Cleared again the
+  // moment the user manually closes that same branch.
+  const manuallyExpanded = useRef<Set<string>>(new Set());
+
+  // Auto-expand/collapse this tab's own children based on where currentTab
+  // lives, but never force-close a branch the user pinned open by hand.
+  useEffect(() => {
+    if (!children) return;
+    const autoOpen = computeAutoOpenKeys(children, currentTab);
+    setExpanded(() => {
+      const next: Record<string, boolean> = {};
+      children.forEach((child) => {
+        if (!child.children || child.children.length === 0) return;
+        next[child.key] = autoOpen.has(child.key) || manuallyExpanded.current.has(child.key);
+      });
+      return next;
+    });
+  }, [currentTab, children]);
 
   const toggleExpanded = (key: string) => {
-    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+    setExpanded((prev) => {
+      const nextValue = !prev[key];
+      if (nextValue) {
+        manuallyExpanded.current.add(key);
+      } else {
+        manuallyExpanded.current.delete(key);
+      }
+      return { ...prev, [key]: nextValue };
+    });
   };
 
   const handleTabClick = () => {
@@ -114,9 +161,30 @@ function SidebarTab({ tabKey, label, icon, active, onClick, children, isExpanded
 
 function SidebarSection({ label, sidebarTabs, onClick, currentTab }: SidebarSectionProps) {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const manuallyExpanded = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    const autoOpen = computeAutoOpenKeys(sidebarTabs, currentTab);
+    setExpanded(() => {
+      const next: Record<string, boolean> = {};
+      sidebarTabs.forEach((tab) => {
+        if (!tab.children || tab.children.length === 0) return;
+        next[tab.key] = autoOpen.has(tab.key) || manuallyExpanded.current.has(tab.key);
+      });
+      return next;
+    });
+  }, [currentTab, sidebarTabs]);
 
   const toggleExpanded = (key: string) => {
-    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+    setExpanded((prev) => {
+      const nextValue = !prev[key];
+      if (nextValue) {
+        manuallyExpanded.current.add(key);
+      } else {
+        manuallyExpanded.current.delete(key);
+      }
+      return { ...prev, [key]: nextValue };
+    });
   };
 
   return (
