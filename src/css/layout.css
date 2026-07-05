@@ -254,17 +254,20 @@
 .section-image-button {
   display: block;
   width: 100%;
+  aspect-ratio: 16 / 9;      /* NEW — locks every card to the same shape */
   border: none;
   padding: 0;
-  background: transparent;
+  background: var(--panel);
   cursor: zoom-in;
+  overflow: hidden;
 }
 
 .section-image-button img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
-  object-fit: cover;
+  object-fit: cover;         /* CHANGED from scale-down — fills the box, crops instead of letterboxing */
+  background: var(--panel);
 }
 
 .section-image-card figcaption {
@@ -287,20 +290,29 @@
 
 .image-lightbox-inner {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: min(100%, 980px);
   max-height: 100%;
-  overflow: hidden;
+  min-height: 0;
 }
 
 .image-lightbox-inner img {
-  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
   height: auto;
+  object-fit: contain;
   display: block;
   border-radius: 18px;
   box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
 }
 
 .image-lightbox-caption {
+  flex: 0 0 auto;
   margin-top: 16px;
   color: var(--muted);
   font-size: 14px;

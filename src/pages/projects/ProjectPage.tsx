@@ -5,6 +5,17 @@ import Sidebar from '../../components/Sidebar';
 
 const collectSectionTabs = (section: GamePageSidebarSection) => section.sections;
 
+// How far from the top of the viewport counts as the "active" reading line.
+// Roughly clears the sticky topbar (48px) plus a little breathing room.
+const TRIGGER_LINE = 100;
+
+// How far below the top of the viewport a section should land when you
+// click it in the sidebar — gives some breathing room under the topbar
+// instead of snapping the heading right to the very edge of the screen.
+// Keep this comfortably under TRIGGER_LINE, or the section you just
+// clicked won't register as "active" until you scroll further.
+const SCROLL_LANDING_OFFSET = 80;
+
 type ProjectPageProps = {
   config: ProjectPageConfig;
 };
@@ -14,17 +25,22 @@ function ProjectPage({ config }: ProjectPageProps) {
   const initialSection = sectionTabs.find((tab) => tab.content)?.key ?? sectionTabs[0]?.key ?? '';
   const [currentTab, setCurrentTab] = useState<string>(initialSection);
 
+  // Holds the actual DOM nodes for every rendered <section>, keyed by tab key.
   const sectionElements = useRef<Map<string, HTMLElement>>(new Map());
+  // Cache of ref-callback functions so each one keeps a stable identity across
+  // renders (otherwise React would unregister/re-register every section on
+  // every render).
   const sectionRefCallbacks = useRef<Map<string, (el: HTMLElement | null) => void>>(new Map());
+  // Wraps every rendered section — watched by a ResizeObserver so we can
+  // detect layout shifts (e.g. images finishing loading) that happen
+  // without any actual scrolling.
+  const sectionsContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Persistent record of "is this section currently in the active band?" —
-  // updated incrementally from each observer callback rather than replaced,
-  // since a single callback only reports elements that just crossed a threshold.
-  const visibilityState = useRef<Map<string, boolean>>(new Map());
-
-  const suppressObserver = useRef(false);
+  // While true, scroll/resize-triggered recalculation is ignored — used
+  // while a programmatic scrollTo (from a sidebar click) is animating.
+  const suppressScrollSpy = useRef(false);
   const scrollEndTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const scrollEndListener = useRef<(() => void) | null>(null);
+  const rafId = useRef<number | null>(null);
 
   const getSectionRef = useCallback((key: string) => {
     if (!sectionRefCallbacks.current.has(key)) {
@@ -39,39 +55,56 @@ function ProjectPage({ config }: ProjectPageProps) {
     return sectionRefCallbacks.current.get(key)!;
   }, []);
 
-  // Looks at the full visibility map (not just the latest callback batch)
-  // and picks whichever visible section is closest to the top of the page.
-  const applyTopmostVisible = () => {
-    let bestKey: string | null = null;
-    let bestTop = Infinity;
+  // Classic scroll-spy rule: among sections whose top has already scrolled
+  // above TRIGGER_LINE, pick the one whose top is closest to the line (the
+  // largest top value that still qualifies). A section that's mostly
+  // scrolled away has a very negative top and can never win this comparison.
+  const updateActiveSection = useCallback(() => {
+    const entries = Array.from(sectionElements.current.entries());
+    if (entries.length === 0) return;
 
-    visibilityState.current.forEach((isVisible, key) => {
-      if (!isVisible) return;
-      const el = sectionElements.current.get(key);
-      if (!el) return;
+    let bestKey: string | null = null;
+    let bestTop = -Infinity;
+
+    entries.forEach(([key, el]) => {
       const top = el.getBoundingClientRect().top;
-      if (top < bestTop) {
+      if (top <= TRIGGER_LINE && top > bestTop) {
         bestTop = top;
         bestKey = key;
       }
     });
 
-    if (bestKey) setCurrentTab(bestKey);
-  };
+    // Nothing has reached the line yet — e.g. page just loaded at the very
+    // top, above the first section. Default to the first section.
+    if (!bestKey) {
+      bestKey = entries[0][0];
+    }
+
+    setCurrentTab(bestKey);
+  }, []);
+
+  // Throttled wrapper so scroll and resize events both funnel through
+  // at most once per animation frame, regardless of how often they fire.
+  const scheduleUpdate = useCallback(() => {
+    if (suppressScrollSpy.current) return;
+    if (rafId.current !== null) return;
+    rafId.current = requestAnimationFrame(() => {
+      rafId.current = null;
+      updateActiveSection();
+    });
+  }, [updateActiveSection]);
 
   const handleSectionSelect = (sectionKey: string) => {
     setCurrentTab(sectionKey);
-    suppressObserver.current = true;
+    suppressScrollSpy.current = true;
 
     const element = sectionElements.current.get(sectionKey);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const targetTop = element.getBoundingClientRect().top + window.scrollY - SCROLL_LANDING_OFFSET;
+      window.scrollTo({ top: targetTop, behavior: 'smooth' });
     }
 
     // Clean up any previous in-flight listener before starting a new one.
-    if (scrollEndListener.current) {
-      window.removeEventListener('scroll', scrollEndListener.current);
-    }
     if (scrollEndTimeout.current) clearTimeout(scrollEndTimeout.current);
 
     // Release suppression once scrolling has actually stopped — detected by
@@ -80,48 +113,39 @@ function ProjectPage({ config }: ProjectPageProps) {
     const onScroll = () => {
       if (scrollEndTimeout.current) clearTimeout(scrollEndTimeout.current);
       scrollEndTimeout.current = setTimeout(() => {
-        suppressObserver.current = false;
+        suppressScrollSpy.current = false;
         window.removeEventListener('scroll', onScroll);
-        scrollEndListener.current = null;
-        // Reconcile once more in case the observer missed anything while suppressed.
-        applyTopmostVisible();
+        updateActiveSection();
       }, 150);
     };
 
-    scrollEndListener.current = onScroll;
     window.addEventListener('scroll', onScroll, { passive: true });
     onScroll(); // also start the timer immediately, in case the scroll is a no-op
   };
 
   useEffect(() => {
-    const entries = Array.from(sectionElements.current.entries());
-    if (entries.length === 0) return;
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    updateActiveSection();
 
-    const observer = new IntersectionObserver(
-      (observedEntries) => {
-        observedEntries.forEach((entry) => {
-          const match = entries.find(([, el]) => el === entry.target);
-          if (match) visibilityState.current.set(match[0], entry.isIntersecting);
-        });
-
-        if (suppressObserver.current) return;
-        applyTopmostVisible();
-      },
-      {
-        root: null,
-        rootMargin: '-96px 0px -65% 0px',
-        threshold: 0,
-      }
-    );
-
-    entries.forEach(([, el]) => observer.observe(el));
+    // Watches for layout shifts caused by anything finishing after mount —
+    // async-loading screenshots being the main culprit — and re-runs the
+    // same positional check used for real scrolling. This is what catches
+    // the "correct tab, then wrong tab a moment later" bug: it wasn't a
+    // scroll at all, it was the page growing underneath you.
+    let resizeObserver: ResizeObserver | null = null;
+    if (sectionsContainerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        scheduleUpdate();
+      });
+      resizeObserver.observe(sectionsContainerRef.current);
+    }
 
     return () => {
-      observer.disconnect();
-      if (scrollEndListener.current) window.removeEventListener('scroll', scrollEndListener.current);
-      if (scrollEndTimeout.current) clearTimeout(scrollEndTimeout.current);
+      window.removeEventListener('scroll', scheduleUpdate);
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
+      resizeObserver?.disconnect();
     };
-  }, [sectionTabs]);
+  }, [sectionTabs, scheduleUpdate, updateActiveSection]);
 
   const renderSections = (tabs: GamePageSection[]) =>
     tabs.map((tab) => (
@@ -160,7 +184,9 @@ function ProjectPage({ config }: ProjectPageProps) {
       <div className="layout2">
         <Sidebar onClick={handleSectionSelect} currentTab={currentTab} gamePageSections={config.sections} />
         <div className="view" id={config.viewId}>
-          <div className="page-sections">{renderSections(sectionTabs)}</div>
+          <div className="page-sections" ref={sectionsContainerRef}>
+            {renderSections(sectionTabs)}
+          </div>
         </div>
       </div>
     </div>

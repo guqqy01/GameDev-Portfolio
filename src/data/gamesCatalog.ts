@@ -1,5 +1,8 @@
 import type { Game } from '../types';
 import pjScreenshot from '../assets/The Pilgrims Journey Images/The Pilgrims Journey (Gameplay 2) Screenshot.png'
+import GoLScreenshot from '../assets/The Game of Life/The_Game_of_Life_Screenshot.png'
+import BoidScreenshot from '../assets/Boid/Boid Simulation Screenshot.png'
+import shallowWaterScreenshot from '../assets/2D Shallow Water Wave/2D Shallow water wave Screenshot.png'
 export const games: Game[] = [
   {
     id: 'the-pilgrims-journey',
@@ -16,7 +19,7 @@ export const games: Game[] = [
     title: "The Blind Mans Requisite",
     screenshot: "",
     description: 'A Horror game where you play as a blind man with echo location',
-    genre: 'HORROR / PUZZLE / 3D',
+    genre: 'HORROR / 3D',
     engine: 'UNITY',
     tags: ['C#', 'HORROR', '3D'],
     href: '/games/the-blind-mans-requisite',
@@ -24,7 +27,7 @@ export const games: Game[] = [
   {
     id: 'the-game-of-life',
     title: "The Game Of Life",
-    screenshot: "",
+    screenshot: GoLScreenshot,
     description: 'A small project where I simulate "the game of life"',
     genre: '2D',
     engine: 'UNITY',
@@ -34,7 +37,7 @@ export const games: Game[] = [
   {
     id: 'boids',
     title: "Boid Simulation",
-    screenshot: "",
+    screenshot: BoidScreenshot,
     description: 'A small project where I simulate boids',
     genre: '3D',
     engine: 'UNITY',
@@ -44,7 +47,7 @@ export const games: Game[] = [
   {
     id: 'shallow-water',
     title: "Shallow Water Simulation",
-    screenshot: "",
+    screenshot: shallowWaterScreenshot,
     description: 'A shallow water simulation',
     genre: '3D',
     engine: 'UNITY',
