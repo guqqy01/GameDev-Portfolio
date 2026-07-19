@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type ImageItem = {
   src: string;
@@ -9,6 +9,24 @@ type ImageItem = {
 
 function ImageGrid({ images }: { images: ImageItem[] }) {
   const [activeImage, setActiveImage] = useState<ImageItem | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (!activeImage) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setActiveImage(null);
+      }
+    };
+
+    closeButtonRef.current?.focus();
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activeImage]);
 
   const handleOpenImage = (image: ImageItem) => {
     setActiveImage(image);
@@ -28,7 +46,7 @@ function ImageGrid({ images }: { images: ImageItem[] }) {
               className="section-image-button"
               onClick={() => handleOpenImage(img)}
             >
-              <img src={img.src} alt={img.alt} />
+              <img src={img.src} alt={img.alt} loading="lazy" decoding="async" />
             </button>
             {img.caption && <figcaption>{img.caption}</figcaption>}
           </figure>
@@ -36,9 +54,10 @@ function ImageGrid({ images }: { images: ImageItem[] }) {
       </div>
 
       {activeImage && (
-        <div className="image-lightbox" onClick={handleCloseImage}>
+        <div className="image-lightbox" role="dialog" aria-modal="true" aria-label="Image preview" onClick={handleCloseImage}>
           <div className="image-lightbox-inner" onClick={(event) => event.stopPropagation()}>
             <button
+              ref={closeButtonRef}
               type="button"
               className="image-lightbox-close"
               onClick={handleCloseImage}
@@ -46,7 +65,7 @@ function ImageGrid({ images }: { images: ImageItem[] }) {
             >
               ×
             </button>
-            <img src={activeImage.src} alt={activeImage.alt} />
+            <img src={activeImage.src} alt={activeImage.alt} loading="eager" decoding="async" />
             {activeImage.caption && (
               <div className="image-lightbox-caption">{activeImage.caption}</div>
             )}

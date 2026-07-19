@@ -1,4 +1,4 @@
-import type { TopbarTab } from '../types';
+import type { TopbarTab as TopbarTabType } from '../types';
 
 type TopbarTabProps = {
   label: string;
@@ -9,17 +9,19 @@ type TopbarTabProps = {
 type TopbarProps = {
   returnTo?: () => void;
   logo?: string;
-  tabs: TopbarTab[];
+  tabs: TopbarTabType[];
   rightBar?: string;
   onSwitchTab: (key: string) => void;
   currentTab: string;
 };
 
-function TopbarTab({ label, isActive, onClick }: TopbarTabProps) {
+function TopbarTabButton({ label, isActive, onClick }: TopbarTabProps) {
   return (
     <button
+      type="button"
       className={isActive ? 'tab active' : 'tab'}
       onClick={onClick}
+      aria-current={isActive ? 'page' : undefined}
     >
       <span className="dot"></span> {label}
     </button>
@@ -36,16 +38,16 @@ function Header({ returnTo, logo = '◆ Guqqy.dev', tabs, rightBar = 'OPEN TO WO
           </button>
         )}
         <span className="topbar-logo">{logo}</span>
-        <div className="topbar-tabs">
+        <nav className="topbar-tabs" aria-label="Section navigation">
           {tabs.map((tab) => (
-            <TopbarTab
+            <TopbarTabButton
               key={tab.key}
               label={tab.label}
               isActive={currentTab === tab.key}
               onClick={() => onSwitchTab(tab.key)}
             />
           ))}
-        </div>
+        </nav>
       </div>
       <div className="status-bar-right">
         <span className="status-pill">{rightBar}</span>

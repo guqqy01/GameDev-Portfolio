@@ -324,10 +324,10 @@
 
 .image-lightbox-close {
   position: absolute;
-  top: -12px;
-  right: -12px;
-  width: 40px;
-  height: 40px;
+  top: -16px;
+  right: -16px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
@@ -335,6 +335,7 @@
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
+  z-index: 2;
 }
 
 .image-lightbox-close:hover {

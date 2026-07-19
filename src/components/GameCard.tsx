@@ -8,7 +8,7 @@ function GameCard({ title, screenshot, genre, description, tags, engine, href }:
     <Link className="game-card game-card-link" to={href}>
       <div className="game-thumb">
         <div className="thumb-placeholder">
-          <img className="thumb-image" src={screenshot} alt={`${title} screenshot`} />
+          <img className="thumb-image" src={screenshot} alt={`${title} screenshot`} loading="lazy" decoding="async" />
         </div>
         <div className="game-engine-badge">{engine}</div>
       </div>

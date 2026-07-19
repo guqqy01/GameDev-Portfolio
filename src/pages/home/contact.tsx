@@ -1,12 +1,19 @@
-import React, { useRef, useState } from 'react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
 
 function Contact(){
     const formRef = useRef<HTMLFormElement | null>(null);
+    const resetStatusTimeout = useRef<number | null>(null);
     const [status, setStatus] = useState<'idle'|'loading'|'success'|'error'>('idle');
 
     const FORM_ENDPOINT = 'https://formspree.io/f/xykajkvv';
 
-    const handleSubmit = async (e: React.SubmitEvent) => {
+    useEffect(() => () => {
+        if (resetStatusTimeout.current !== null) {
+            window.clearTimeout(resetStatusTimeout.current);
+        }
+    }, []);
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!formRef.current) return;
         setStatus('loading');
@@ -19,17 +26,21 @@ function Contact(){
                 headers: { 'Accept': 'application/json' },
             });
 
+            if (resetStatusTimeout.current !== null) {
+                window.clearTimeout(resetStatusTimeout.current);
+            }
+
             if (res.ok) {
                 setStatus('success');
                 formRef.current.reset();
-                setTimeout(() => setStatus('idle'), 4000);
+                resetStatusTimeout.current = window.setTimeout(() => setStatus('idle'), 4000);
             } else {
                 setStatus('error');
-                setTimeout(() => setStatus('idle'), 4000);
+                resetStatusTimeout.current = window.setTimeout(() => setStatus('idle'), 4000);
             }
-        } catch (err) {
+        } catch {
             setStatus('error');
-            setTimeout(() => setStatus('idle'), 4000);
+            resetStatusTimeout.current = window.setTimeout(() => setStatus('idle'), 4000);
         }
     };
 

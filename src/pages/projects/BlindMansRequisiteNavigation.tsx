@@ -1,5 +1,5 @@
 import type { GamePageSidebarSection } from '../../types';
-import  VideoGrid  from '../../components/VideoGrid';
+
 export const gamePageSections : GamePageSidebarSection ={
     label: 'Scene Explorer',
     sections: [

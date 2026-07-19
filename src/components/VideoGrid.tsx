@@ -1,4 +1,4 @@
-import {useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type VideoItem = {
   videoID: string;
@@ -8,6 +8,24 @@ type VideoItem = {
 
 function VideoGrid({ videos }: { videos: VideoItem[] }){
     const [activeVideo, setActiveVideo] = useState<VideoItem | null>(null);
+    const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+
+    useEffect(() => {
+        if (!activeVideo) return;
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setActiveVideo(null);
+            }
+        };
+
+        closeButtonRef.current?.focus();
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [activeVideo]);
 
     const handleOpenVideo = (video: VideoItem) => {
         setActiveVideo(video);
@@ -33,6 +51,8 @@ function VideoGrid({ videos }: { videos: VideoItem[] }){
                                     <img
                                         src = {`https://img.youtube.com/vi/${video.videoID}/hqdefault.jpg`}
                                         alt = {video.title}
+                                        loading = "lazy"
+                                        decoding = "async"
                                     />
                                     <span className = "video-play-icon" aria-hidden = "true">▶</span>
                                 </button>
@@ -45,9 +65,9 @@ function VideoGrid({ videos }: { videos: VideoItem[] }){
 
             {
                 activeVideo && (
-                    <div className = "image-lightbox" onClick = {handleCloseVideo}>
+                    <div className = "image-lightbox" role = "dialog" aria-modal = "true" aria-label = "Video preview" onClick = {handleCloseVideo}>
                         <div className = "image-lightbox-inner" onClick = {(event) => event.stopPropagation()}>
-                            <button className = "image-lightbox-close" onClick = {handleCloseVideo} aria-label = "Close video preview">
+                            <button ref = {closeButtonRef} className = "image-lightbox-close" onClick = {handleCloseVideo} aria-label = "Close video preview" type = "button">
                                 x
                             </button>
                             <div className = "video-lightbox-frame-wrapper">

@@ -27,10 +27,6 @@ function ProjectPage({ config }: ProjectPageProps) {
 
   // Holds the actual DOM nodes for every rendered <section>, keyed by tab key.
   const sectionElements = useRef<Map<string, HTMLElement>>(new Map());
-  // Cache of ref-callback functions so each one keeps a stable identity across
-  // renders (otherwise React would unregister/re-register every section on
-  // every render).
-  const sectionRefCallbacks = useRef<Map<string, (el: HTMLElement | null) => void>>(new Map());
   // Wraps every rendered section — watched by a ResizeObserver so we can
   // detect layout shifts (e.g. images finishing loading) that happen
   // without any actual scrolling.
@@ -42,17 +38,12 @@ function ProjectPage({ config }: ProjectPageProps) {
   const scrollEndTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   const rafId = useRef<number | null>(null);
 
-  const getSectionRef = useCallback((key: string) => {
-    if (!sectionRefCallbacks.current.has(key)) {
-      sectionRefCallbacks.current.set(key, (el: HTMLElement | null) => {
-        if (el) {
-          sectionElements.current.set(key, el);
-        } else {
-          sectionElements.current.delete(key);
-        }
-      });
+  const getSectionRef = useCallback((key: string) => (el: HTMLElement | null) => {
+    if (el) {
+      sectionElements.current.set(key, el);
+    } else {
+      sectionElements.current.delete(key);
     }
-    return sectionRefCallbacks.current.get(key)!;
   }, []);
 
   // Classic scroll-spy rule: among sections whose top has already scrolled

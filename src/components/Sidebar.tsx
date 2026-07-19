@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import type {
   GamePageSidebarSection,
-  SidebarSection,
+  SidebarSection as SidebarSectionType,
   SidebarTab as SidebarTabType,
 } from '../types';
 
@@ -27,11 +27,11 @@ type SidebarSectionProps = {
 type SidebarProps = {
   onClick: (key: string) => void;
   currentTab: string;
-  sideBarSections?: SidebarSection[];
+  sideBarSections?: SidebarSectionType[];
   gamePageSections?: GamePageSidebarSection;
 };
 
-const createSidebarTabs = (section: GamePageSidebarSection): SidebarSection[] => [
+const createSidebarTabs = (section: GamePageSidebarSection): SidebarSectionType[] => [
   {
     label: section.label,
     sidebarTabs: section.sections.map((sectionTab) => {
@@ -109,32 +109,38 @@ function SidebarTab({ tabKey, label, icon, active, onClick, children, isExpanded
     }
   };
 
-  const handleArrowClick = (e: React.MouseEvent) => {
+  const handleArrowClick = (e: MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     onToggle?.();
   };
 
   return (
     <div>
-      <button
-        className={active ? 'sidebar-item active' : 'sidebar-item'}
-        onClick={handleTabClick}
-        style={{ justifyContent: 'space-between' }}
-      >
-        <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span className="icon">{icon}</span>
-          {label}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <button
+          type="button"
+          className={active ? 'sidebar-item active' : 'sidebar-item'}
+          onClick={handleTabClick}
+          style={{ justifyContent: 'space-between', flex: 1 }}
+        >
+          <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="icon">{icon}</span>
+            {label}
+          </span>
+        </button>
         {hasChildren && (
-          <span
+          <button
+            type="button"
             className="sidebar-collapse-toggle"
-            style={{ fontSize: '9px', opacity: 0.5 }}
+            style={{ fontSize: '9px', opacity: 0.5, marginLeft: '4px' }}
             onClick={handleArrowClick}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? `Collapse ${label}` : `Expand ${label}`}
           >
             {isExpanded ? '▼' : '▶'}
-          </span>
+          </button>
         )}
-      </button>
+      </div>
 
       {hasChildren && isExpanded && (
         <div style={{ paddingLeft: '16px' }}>
