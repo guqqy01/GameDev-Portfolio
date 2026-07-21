@@ -32,6 +32,7 @@ function Portfolio() {
             moments that stay with players long after they stop playing.
             <br/>
             <br/>
+            Below are a few projects that I've worked on over the years.
             If you want to see more of a specific project, click one of the cards below.
           </div>
         </div>
@@ -39,13 +40,13 @@ function Portfolio() {
         
 
         <div className="stat-grid">
-          <div className="stat"><div className="stat-val">{games.length}</div><div className="stat-label">PROJECTS</div></div>
-          <div className="stat"><div className="stat-val">0</div><div className="stat-label">GAME JAMS</div></div>
+          <div className="stat"><div className="stat-val">{games.length}</div><div className="stat-label">FEATURED PROJECTS</div></div>
+          {/*<div className="stat"><div className="stat-val">0</div><div className="stat-label">GAME JAMS</div></div>*/}
           <div className="stat"><div className="stat-val">5</div><div className="stat-label">YEARS EXP</div></div>
-          <div className="stat"><div className="stat-val">0</div><div className="stat-label">SHIPPED</div></div>
+          {/*<div className="stat"><div className="stat-val">0</div><div className="stat-label">SHIPPED</div></div>*/}
         </div>
 
-        <div className="section-title">GAMES</div>
+        <div className="section-title">PROJECTS</div>
 
         <div className="games-grid">
           {visibleGames.map((game: Game) => (

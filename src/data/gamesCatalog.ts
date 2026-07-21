@@ -3,6 +3,7 @@ import pjScreenshot from '../assets/The Pilgrims Journey Images/The Pilgrims Jou
 import GoLScreenshot from '../assets/The Game of Life/The_Game_of_Life_Screenshot.png'
 import BoidScreenshot from '../assets/Boid/Boid Simulation Screenshot.png'
 import shallowWaterScreenshot from '../assets/2D Shallow Water Wave/2D Shallow water wave Screenshot.png'
+import BMRScreenshot from '../assets/The Blind Mans Requisite/BMRScreenshot3.png'
 export const games: Game[] = [
   {
     id: 'the-pilgrims-journey',
@@ -17,7 +18,7 @@ export const games: Game[] = [
   {
     id: 'the-blind-mans-requisite',
     title: "The Blind Mans Requisite",
-    screenshot: "",
+    screenshot: BMRScreenshot,
     description: 'A Horror game where you play as a blind man with echo location',
     genre: 'HORROR / 3D',
     engine: 'UNITY',
