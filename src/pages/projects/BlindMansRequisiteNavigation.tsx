@@ -49,6 +49,7 @@ export const gamePageSections : GamePageSidebarSection ={
             <>
                 <p>
                 
+                
                 </p>
             </>
             ),
