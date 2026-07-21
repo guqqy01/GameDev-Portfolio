@@ -48,8 +48,7 @@ export const gamePageSections : GamePageSidebarSection ={
             content: (
             <>
                 <p>
-                
-                
+                    The Blind Man's Requisite is a horror game where you play as a blind man.
                 </p>
             </>
             ),
