@@ -3,6 +3,7 @@ import type { Game } from '../types';
 
 type GameCardProps = Pick<Game, 'title' | 'screenshot' | 'genre' | 'description' | 'tags' | 'engine' | 'href'>;
 
+
 function GameCard({ title, screenshot, genre, description, tags, engine, href }: GameCardProps) {
   return (
     <Link className="game-card game-card-link" to={href}>
