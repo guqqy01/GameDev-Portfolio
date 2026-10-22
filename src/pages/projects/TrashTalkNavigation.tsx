@@ -1,4 +1,5 @@
 import type { GamePageSidebarSection } from '../../types';
+import { ItchEmbed } from '../../components/ItchEmbed';
 export const gamePageSections : GamePageSidebarSection ={
     label: 'Scene Explorer',
     sections: [
@@ -18,8 +19,11 @@ export const gamePageSections : GamePageSidebarSection ={
                     <div className="hero-bio">
                         
                     </div>
-                    
-
+                        <ItchEmbed
+                            uploadId={19861871}
+                            title="Play Trash Talk on itch.io"
+                            href="https://guqqy01.itch.io/trash-talk"
+                        />
                     </div>
                 </>
             ),

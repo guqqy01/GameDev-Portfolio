@@ -7,7 +7,11 @@ import './css/components.css'
 import './css/games.css'
 import './css/game-page.css'
 import App from './App'
-createRoot(document.getElementById('root')).render(
+
+const container = document.getElementById('root')
+if (!container) throw new Error('Root element #root not found')
+
+createRoot(container).render(
   <StrictMode>
     <HashRouter>
       <App />
