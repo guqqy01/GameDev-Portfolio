@@ -2,8 +2,9 @@ import type { ProjectPageConfig } from '../../types';
 import { gamePageSections as pilgrimsJourneySections } from './pilgrimsJourneyNavigation';
 import { gamePageSections as theGameOfLifeSections} from './theGameOfLifeNavigation';
 import { gamePageSections as boidSimulationSections} from './BoidSimulationNavigation';
-import { gamePageSections as shallowWaterSimulationSections } from './ShallowWaterSimulationNavigation';
+import { gamePageSections as shallowWaterSimulationSections } from './TrashTalkNavigation';
 import { gamePageSections as blindMansRequisiteSections } from './BlindMansRequisiteNavigation';
+import { gamePageSections as trashTalkSections } from './TrashTalkNavigation';
 export const projectPageConfigs: Record<string, ProjectPageConfig> = {
   'the-pilgrims-journey': {
     id: 'the-pilgrims-journey',
@@ -39,6 +40,13 @@ export const projectPageConfigs: Record<string, ProjectPageConfig> = {
     logo: "◆ Guqqy.dev      Shallow Water Simulation",
     viewId: 'view-shallow-water',
     sections: shallowWaterSimulationSections,
+  },
+  'trash-talk': {
+    id: 'trash-talk',
+    title: "Trash Talk",
+    logo: "◆ Guqqy.dev      Trash  Talk",
+    viewId: 'view-trash-talk',
+    sections: trashTalkSections,
   },
 };
 

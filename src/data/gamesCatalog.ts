@@ -55,4 +55,14 @@ export const games: Game[] = [
     tags: ['C#', '3D'],
     href: '/games/shallow-water',
   },
+  {
+    id: 'trash-talk',
+    title: "Trash Talk",
+    screenshot: "",
+    description: 'Short game where you defend earth but trash talking an alien into leaving.',
+    genre: '2D',
+    engine: 'UNITY',
+    tags: ['C#', '2D', "GAME JAM"],
+    href: '/games/trash-talk',
+  },
 ];
