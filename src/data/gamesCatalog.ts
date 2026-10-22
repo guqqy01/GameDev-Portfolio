@@ -4,6 +4,7 @@ import GoLScreenshot from '../assets/The Game of Life/The_Game_of_Life_Screensho
 import BoidScreenshot from '../assets/Boid/Boid Simulation Screenshot.png'
 import shallowWaterScreenshot from '../assets/2D Shallow Water Wave/2D Shallow water wave Screenshot.png'
 import BMRScreenshot from '../assets/The Blind Mans Requisite/BMRScreenshot3.png'
+import TrashTalkScreenshot from '../assets/Trash Talk/TrashTalkScreenshot.png'
 export const games: Game[] = [
   {
     id: 'the-pilgrims-journey',
@@ -58,7 +59,7 @@ export const games: Game[] = [
   {
     id: 'trash-talk',
     title: "Trash Talk",
-    screenshot: "",
+    screenshot: TrashTalkScreenshot,
     description: 'Short game where you defend earth but trash talking an alien into leaving.',
     genre: '2D',
     engine: 'UNITY',
